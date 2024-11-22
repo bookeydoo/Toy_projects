@@ -1,6 +1,11 @@
 #include<glad/glad.h>
 #include<iostream>
 #include<GLFW/glfw3.h>
+#include "EBO.h"
+#include "VBO.h"
+#include "VAO.h"
+#include "shaderClass.h"
+
 
 
 
@@ -34,7 +39,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	//self explanatory 
-	GLFWwindow* main_window = glfwCreateWindow(400, 400, "my window", NULL, NULL);
+	GLFWwindow* main_window = glfwCreateWindow(800, 800, "my window", NULL, NULL);
 
 		if (main_window == NULL) {
 			std::cout << "sth went wrong ";
@@ -49,62 +54,50 @@ int main() {
 	glViewport(0, 0, 800, 800);
 
 
-	//create reference containers for vertex array object and vertex buffer object
-	GLuint VBO,VAO ,EBO; //vertex buffer object 
-	glGenVertexArrays(1,&VAO);
-	glGenBuffers(1, &VBO); 
-	glGenBuffers(1, &EBO);
-	//make the VAO the current vertex array object by binding it
-	glBindVertexArray(VAO);
-
-	//bind the VBO as a GL_ARRAY_BUFFER
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	
-	//introduce the vertices into the vbo
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices,GL_STATIC_DRAW);
+	Shader shaderprogram("default.vert", "default.frag");
+
+	VAO VAO_1;
 	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	VAO_1.bind();
 
-	//configure the vertex attribute so that opengl knows how to read the vbo
-	glVertexAttribPointer(0,3,GL_FLOAT,false,3*sizeof(GL_FLOAT),(void*)0);
+	VBO VBO_1(vertices, sizeof(vertices));
+	EBO EBO_1(indices, sizeof(indices));
 
-	//enable the vertex attribute so it can be used
-	glEnableVertexAttribArray(0);
-	//binding their values to 0 for some reason??
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0) ;
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	VAO_1.linkVBO(VBO_1,0);
+	VAO_1.unbind();
+	EBO_1.unbind();
+	VBO_1.unbind();
 
-	while (!glfwWindowShouldClose(main_window)) {
+	while (!glfwWindowShouldClose(main_window)) 
+	{
 
-	//specify color of background
-	glClearColor(0.07f, 0.13f, 0.2f, 1.0f);
-	//clear back buffer and  assign new color to it
-	glClear(GL_COLOR_BUFFER_BIT);
+			//specify color of background
+			glClearColor(0.07f, 0.13f, 0.2f, 1.0f);
+			//clear back buffer and  assign new color to it
+			glClear(GL_COLOR_BUFFER_BIT);
 
-
-	//specify which shader program to use
+			shaderprogram.activate();
 	
-
-	//BIND VAO
- 	glBindVertexArray(VAO);
+			VAO_1.bind();
 	
-	//draw triangle
-	glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0 );
+			//draw triangle
+			glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0 );
 
-	//swap back buffer with front buffer
-	glfwSwapBuffers(main_window);
+			//swap back buffer with front buffer
+			glfwSwapBuffers(main_window);
 
-	//take care of all glfw events
-	glfwPollEvents();
+			//take care of all glfw events
+			glfwPollEvents();
 	}
 
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+		//deleting all the objects
+			VAO_1.Delete();
+			VBO_1.Delete();
+			EBO_1.Delete();
+			shaderprogram.Delete();
 	
-	glfwWindowShouldClose(main_window);
-	glfwTerminate();
-		return 0;
+			glfwWindowShouldClose(main_window);
+			glfwTerminate();
+				return 0;
 	}
