@@ -45,28 +45,17 @@ int main() {
 
 		ClearBackground(RAYWHITE);
 		BeginMode3D(camera);
-		UpdateCamera(&camera,CAMERA_FIRST_PERSON);
+		UpdateCamera(&camera,CAMERA_FREE);
 		load_cube(initpos);
 		DrawGrid(50, 1.0f);
 		DrawLine3D({ 0,-50,0 }, { 0,50,0 },BLACK);
 
-		if (IsKeyPressed(KEY_UP)) {
-			initpos.x += 10;
-		}
-		if (IsKeyPressed(KEY_DOWN)) {
-			initpos.x -= 10;
-		}
-		if (IsKeyPressed(KEY_RIGHT)) {
-			initpos.z += 10;
-		}
-		if (IsKeyPressed(KEY_LEFT)) {
-			initpos.z -= 10;
-		}
-
-
-
-		EndDrawing();
+		
+		camera.fovy -= GetMouseWheelMove()*2.0f;
+		if (camera.fovy < 10) camera.fovy = 10;
+		if (camera.fovy > 90) camera.fovy = 90;
 		EndMode3D();
+		EndDrawing();
 	}
 
 
