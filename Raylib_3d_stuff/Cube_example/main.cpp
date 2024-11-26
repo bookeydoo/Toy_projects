@@ -32,8 +32,8 @@ int main() {
 	camera.fovy = { 45.0 };
 	camera.projection = { CAMERA_FREE};
 	
-	UpdateCamera(&camera, CAMERA_FREE);
-
+	camera.position={ 0,10,0 };
+	
 	while (!WindowShouldClose()) {
 		HideCursor();
 
@@ -45,42 +45,26 @@ int main() {
 
 		ClearBackground(RAYWHITE);
 		BeginMode3D(camera);
+		UpdateCamera(&camera,CAMERA_FIRST_PERSON);
 		load_cube(initpos);
 		DrawGrid(50, 1.0f);
 		DrawLine3D({ 0,-50,0 }, { 0,50,0 },BLACK);
 
-		if (IsKeyPressed(KEY_S)) {
-			initpos.x -= 10;
-		}
-		if (IsKeyPressed(KEY_W)) {
+		if (IsKeyPressed(KEY_UP)) {
 			initpos.x += 10;
 		}
-		if (IsKeyPressed(KEY_D)) {
+		if (IsKeyPressed(KEY_DOWN)) {
+			initpos.x -= 10;
+		}
+		if (IsKeyPressed(KEY_RIGHT)) {
 			initpos.z += 10;
 		}
-		if (IsKeyPressed(KEY_A)) {
+		if (IsKeyPressed(KEY_LEFT)) {
 			initpos.z -= 10;
 		}
 
 
-		if (IsKeyDown(KEY_RIGHT)) {
-			camera.position.x++;
-		}
-		if (IsKeyDown(KEY_LEFT)) {
-			camera.position.x--;
-		}
-		if (IsKeyDown(KEY_UP)) {
-			camera.position.y++;
-		}
-		if (IsKeyDown(KEY_DOWN)) {
-			camera.position.y--;
-		}
-		if (IsKeyDown(KEY_SPACE)) {
-			camera.position.z++;
-		}
-		if (IsKeyDown(KEY_LEFT_CONTROL)) {
-			camera.position.z--;
-		}
+
 		EndDrawing();
 		EndMode3D();
 	}
