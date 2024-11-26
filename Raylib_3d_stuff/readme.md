@@ -1,0 +1,1 @@
+This repo is gonna be for experimenting with 3d with raylib until i can properly make minecraft ان شاء الله
