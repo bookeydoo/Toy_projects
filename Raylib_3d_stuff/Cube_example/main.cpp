@@ -4,8 +4,8 @@
 
 void load_cube(Vector3 pos) {
 
-	DrawCube(pos, 30, 30, 30, RED);
-
+	DrawCube(pos, 2.0, 2.0, 2.0, RED);
+	DrawCubeWires(pos, 2.0, 2.0, 2.0f, BLUE);
 }
 
 
@@ -24,13 +24,15 @@ int main() {
 	InitWindow(Screensizes[option].x,Screensizes[option].y,"3d with raylib");
 	
 	SetTargetFPS(60);
-	Vector3 initpos = { 0,10,50 };
+	Vector3 initpos = { 0,0,0 };
 
 	Camera3D camera = { 0};
-	camera.target = initpos;
+	camera.target = {10,10,10};
 	camera.up = { 0,1,0 };
-	camera.fovy = { 90 };
+	camera.fovy = { 45.0 };
 	camera.projection = { CAMERA_FREE};
+	
+	UpdateCamera(&camera, CAMERA_FREE);
 
 	while (!WindowShouldClose()) {
 		HideCursor();
@@ -39,21 +41,27 @@ int main() {
 		DrawText("Welcome to 3d test", GetScreenWidth() / 2, 150, 20, BLUE);
 		DrawText("to move camera in y ,Press up-down",GetScreenWidth()-300,150,15,RED);
 		DrawText("to move camera in x ,Press right-left", GetScreenWidth() - 300, 200, 15, RED);
+		DrawText("to change screen size,Press x", GetScreenWidth() - 300, 250, 15, RED);
+
 		ClearBackground(RAYWHITE);
 		BeginMode3D(camera);
 		load_cube(initpos);
-		if (IsKeyPressed(KEY_A)) {
-			initpos.y-=10;
+		DrawGrid(50, 1.0f);
+		DrawLine3D({ 0,-50,0 }, { 0,50,0 },BLACK);
+
+		if (IsKeyPressed(KEY_S)) {
+			initpos.x -= 10;
 		}
 		if (IsKeyPressed(KEY_W)) {
 			initpos.x += 10;
 		}
 		if (IsKeyPressed(KEY_D)) {
-			initpos.y += 10;
+			initpos.z += 10;
 		}
-		if (IsKeyPressed(KEY_S)) {
-			initpos.x -= 10;
+		if (IsKeyPressed(KEY_A)) {
+			initpos.z -= 10;
 		}
+
 
 		if (IsKeyDown(KEY_RIGHT)) {
 			camera.position.x++;
