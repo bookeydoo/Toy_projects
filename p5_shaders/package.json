@@ -11,5 +11,8 @@
   "description": "",
   "dependencies": {
     "p5": "^1.11.2"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.1.4"
   }
 }
