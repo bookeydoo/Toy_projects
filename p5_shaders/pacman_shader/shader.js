@@ -1,6 +1,6 @@
 function setup() {
     createCanvas(500, 500, WEBGL);
-    describe('i hate niggers')
+    describe('simple pacman shader ')
     }
   
   function draw() {
